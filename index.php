@@ -42,8 +42,9 @@ $result = $conn->query("SELECT * FROM recipes");
                     <?php endif; ?>
                 </td>
                 <td>
+                    <a href="details.php?id=<?= $row['id'] ?>" class="btn btn-info btn-sm">View</a>
                     <a href="edit.php?id=<?= $row['id'] ?>" class="btn btn-warning btn-sm">Edit</a>
-                    <a href="delete.php?id=<?= $row['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</a>
+                    <button class="btn btn-danger btn-sm" onclick="deleteRecipe(<?= $row['id'] ?>)">Delete</button>
                 </td>
             </tr>
         <?php endwhile; ?>
@@ -53,5 +54,26 @@ $result = $conn->query("SELECT * FROM recipes");
 
 <script src="js/bootstrap.min.js"></script>
 <script src="js/popper.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    function deleteRecipe(recipeId) {
+        var confirmDelete = confirm("Are you sure you want to delete this recipe?");
+        
+        if (confirmDelete) {
+            $.ajax({
+                url: 'delete.php',
+                type: 'POST',
+                data: {id: recipeId},
+                success: function(response) {
+                    // Reload the page or update the table as needed
+                    location.reload();
+                },
+                error: function(error) {
+                    console.error('Error deleting recipe:', error);
+                }
+            });
+        }
+    }
+</script>
 </body>
 </html>
